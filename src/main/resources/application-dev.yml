@@ -1,0 +1,18 @@
+redis:
+  single: #单节点模式
+    url: redis://127.0.0.1:6379
+    password: 123456
+    database: 0
+    timeout: 1000
+  masterslave: #主从模式
+    master: redis://127.0.0.1:6379
+    slave: redis://127.0.0.1:6380,redis://127.0.0.1:6381
+    password: 123456
+    database: 0
+    timeout: 1000
+  sentinel: #哨兵模式
+    masterName: mymaster
+    sentinelUrl: redis://127.0.0.1:6379
+    password: 123456
+    database: 0
+    timeout: 1000
