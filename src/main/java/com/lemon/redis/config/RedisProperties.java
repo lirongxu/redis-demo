@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 @Data
 @Configuration
 @ConfigurationProperties(prefix = "redis")
-public class RedissonProperties {
+public class RedisProperties {
     /**
      * 单节点模式
      */
