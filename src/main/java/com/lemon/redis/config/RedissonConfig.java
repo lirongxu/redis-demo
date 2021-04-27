@@ -6,17 +6,45 @@ import org.redisson.client.codec.Codec;
 import org.redisson.client.codec.StringCodec;
 import org.redisson.config.Config;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 
 /**
  * @Author lemon
  * @Date 2021/4/25
  */
-//@Configuration
+@Configuration
 @Import(RedisProperties.class)
 public class RedissonConfig {
 
-    @Bean(name = "RedissonClient")
+    /**
+     * 单节点模式
+     * @param redisProperties
+     * @return
+     */
+    @Bean
+    public RedissonClient redissonClient(RedisProperties redisProperties){
+        Config config = new Config();
+        Codec codec = new StringCodec();
+        config.setCodec(codec);
+
+        config.useSingleServer()
+                .setAddress(redisProperties.getSingle().getUrl().startsWith("redis") ? redisProperties.getSingle().getUrl():String.format("redis://%s", redisProperties.getSingle().getUrl()))
+                .setPassword(redisProperties.getSingle().getPassword())
+                .setDatabase(redisProperties.getSingle().getDatabase())
+                .setTimeout(redisProperties.getSingle().getTimeout());
+
+        RedissonClient redisson = Redisson.create(config);
+        return redisson;
+    }
+
+    /**
+     * 主从模式
+     * 一主两从
+     * @param redisProperties
+     * @return
+     */
+//    @Bean(name = "RedissonClient")
     public RedissonClient getRedissonClient(RedisProperties redisProperties){
         Config config = new Config();
         Codec codec = new StringCodec();
@@ -34,23 +62,12 @@ public class RedissonConfig {
         return redisson;
     }
 
-    @Bean(name = "SingleRedissonClient")
-    public RedissonClient getRedissonSingleClient(RedisProperties redisProperties){
-        Config config = new Config();
-        Codec codec = new StringCodec();
-        config.setCodec(codec);
-
-        config.useSingleServer()
-                .setAddress(redisProperties.getSingle().getUrl().startsWith("redis") ? redisProperties.getSingle().getUrl():String.format("redis://%s", redisProperties.getSingle().getUrl()))
-                .setPassword(redisProperties.getSingle().getPassword())
-                .setDatabase(redisProperties.getSingle().getDatabase())
-                .setTimeout(redisProperties.getSingle().getTimeout());
-
-        RedissonClient redisson = Redisson.create(config);
-        return redisson;
-    }
-
-    @Bean(name = "SentinelRedissonClient")
+    /**
+     * 哨兵摸模式
+     * @param redisProperties
+     * @return
+     */
+//    @Bean(name = "SentinelRedissonClient")
     public RedissonClient getRedissonSentinelClient(RedisProperties redisProperties){
         Config config = new Config();
         Codec codec = new StringCodec();

@@ -39,6 +39,12 @@ public class RedisProperties {
         private Integer database;
 
         private Integer timeout;
+        //最大空闲连接数
+        private Integer maxIdle;
+        //最大连接数
+        private Integer maxTotal;
+        //最大等待时间
+        private Integer maxWaitMillis;
     }
 
     @Data

@@ -17,14 +17,14 @@ import java.util.Set;
 @Import(RedisProperties.class)
 public class JedisConfig {
     @Bean
-    public JedisPoolConfig jedisPoolConfig() {
+    public JedisPoolConfig jedisPoolConfig(RedisProperties redisProperties) {
         JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
         //最大空闲连接数
-        jedisPoolConfig.setMaxIdle(10);
+        jedisPoolConfig.setMaxIdle(redisProperties.getSentinel().getMaxIdle());
         //最大连接数
-        jedisPoolConfig.setMaxTotal(10000);
+        jedisPoolConfig.setMaxTotal(redisProperties.getSentinel().getMaxTotal());
         //当池内没有可用连接时，最大等待时间
-        jedisPoolConfig.setMaxWaitMillis(10000);
+        jedisPoolConfig.setMaxWaitMillis(redisProperties.getSentinel().getMaxWaitMillis());
         return jedisPoolConfig;
     }
 

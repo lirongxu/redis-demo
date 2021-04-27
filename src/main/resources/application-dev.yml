@@ -16,3 +16,6 @@ redis:
     password: 123456
     database: 0
     timeout: 1000
+    maxIdle: 10
+    maxTotal: 100
+    maxWaitMillis: 10000
